@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Storage</title>
+  <style>
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-gap: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Video Storage</h1>
+
+  <!-- Container for upload form and search bar -->
+  <div class="container">
+    <!-- Video upload form -->
+    <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
+      <input type="file" name="videoFile">
+      <input type="submit" value="Upload">
+    </form>
+
+    <!-- Search bar -->
+    <input type="text" id="searchInput" placeholder="Search videos..." />
+  </div>
+
+  <!-- Video gallery -->
+  <h2>Video Gallery</h2>
+  <div id="videoGallery" class="gallery"></div>
+
+  <script>
+    // Function to update the video gallery
+    function updateVideoGallery(searchTerm) {
+      // Make an AJAX request to fetch the list of videos
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/videos', true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var videoList = JSON.parse(xhr.responseText);
+          var galleryElement = document.getElementById('videoGallery');
+          galleryElement.innerHTML = ''; // Clear existing gallery
+
+          // Filter videos based on search term
+          var filteredVideos = videoList.filter(function(video) {
+            return video.name.toLowerCase().includes(searchTerm.toLowerCase());
+          });
+
+          // Add video items to the gallery
+          filteredVideos.forEach(function(video) {
+            var videoItem = document.createElement('div');
+            var videoPlayer = document.createElement('video');
+            videoPlayer.src = video.url;
+            videoPlayer.controls = true;
+            videoPlayer.width = 320;
+            videoPlayer.height = 240;
+            videoItem.appendChild(videoPlayer);
+            galleryElement.appendChild(videoItem);
+          });
+        }
+      };
+      xhr.send();
+    }
+
+    // Update the video gallery initially
+    updateVideoGallery('');
+
+    // Handle form submission (upload)
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var formData = new FormData(this);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/upload', true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // Update the video gallery after successful upload
+          updateVideoGallery('');
+        }
+      };
+      xhr.send(formData);
+    });
+
+    // Handle search input
+    document.getElementById('searchInput').addEventListener('input', function() {
+      var searchTerm = this.value;
+      updateVideoGallery(searchTerm);
+    });
+  </script>
+</body>
+</html>
