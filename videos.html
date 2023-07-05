@@ -101,17 +101,12 @@
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '#', true);
 
-      xhr.upload.onprogress = function(event) {
-        if (event.lengthComputable) {
-          var percentComplete = (event.loaded / event.total) * 100;
-          progressBarFill.style.width = percentComplete + '%';
-        }
-      };
+      xhr.upload.onprogress = function(eventContinuación del código HTML editado:
 
+```html
       xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
           progressBar.style.display = 'none';
-```html
           if (xhr.status === 200) {
             // Update the video gallery after successful upload
             updateVideoGallery('');
