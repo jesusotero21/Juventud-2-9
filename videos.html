@@ -37,7 +37,7 @@
   <!-- Container for upload form and search bar -->
   <div class="container">
     <!-- Video upload form -->
-    <form id="uploadForm" action="upload.php" method="POST" enctype="multipart/form-data">
+    <form id="uploadForm" action="#" method="POST" enctype="multipart/form-data">
       <input type="file" name="videoFile">
       <input type="submit" value="Upload">
       <div class="progress-bar" style="display: none;">
@@ -58,7 +58,7 @@
     function updateVideoGallery(searchTerm) {
       // Make an AJAX request to fetch the list of videos
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/videos', true);
+      xhr.open('GET', './videos.json', true);
       xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
           var videoList = JSON.parse(xhr.responseText);
@@ -99,7 +99,7 @@
       progressBarFill.style.width = '0%';
 
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'upload.php', true);
+      xhr.open('POST', '#', true);
 
       xhr.upload.onprogress = function(event) {
         if (event.lengthComputable) {
@@ -109,26 +109,26 @@
       };
 
       xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          progressBar.style.display = 'none';
 ```html
-          if (xhr.readyState === 4) {
-            progressBar.style.display = 'none';
-            if (xhr.status === 200) {
-              // Update the video gallery after successful upload
-              updateVideoGallery('');
-            } else {
-              alert('Error uploading video. Please try again.');
-            }
+          if (xhr.status === 200) {
+            // Update the video gallery after successful upload
+            updateVideoGallery('');
+          } else {
+            alert('Error uploading video. Please try again.');
           }
-        };
+        }
+      };
 
-        xhr.send(formData);
-      });
+      xhr.send(formData);
+    });
 
-      // Handle search input
-      document.getElementById('searchInput').addEventListener('input', function() {
-        var searchTerm = this.value;
-        updateVideoGallery(searchTerm);
-      });
-    </script>
-  </body>
+    // Handle search input
+    document.getElementById('searchInput').addEventListener('input', function() {
+      var searchTerm = this.value;
+      updateVideoGallery(searchTerm);
+    });
+  </script>
+</body>
 </html>

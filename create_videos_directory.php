@@ -5,7 +5,7 @@ $videosDirectory = __DIR__ . '/videos/';
 // Verificar si el directorio de videos no existe
 if (!is_dir($videosDirectory)) {
   // Intentar crear el directorio de videos
-  if (!mkdir($videosDirectory)) {
+  if (!mkdir($videosDirectory) && !is_dir($videosDirectory)) {
     die('Error: No se pudo crear el directorio de videos.');
   }
 }
