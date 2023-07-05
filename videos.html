@@ -23,7 +23,7 @@
   <!-- Container for upload form and search bar -->
   <div class="container">
     <!-- Video upload form -->
-    <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
+    <form id="uploadForm" action="upload.php" method="POST" enctype="multipart/form-data">
       <input type="file" name="videoFile">
       <input type="submit" value="Upload">
     </form>
@@ -78,7 +78,7 @@
       var formData = new FormData(this);
 
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/upload', true);
+      xhr.open('POST', 'upload.php', true);
       xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
           // Update the video gallery after successful upload
